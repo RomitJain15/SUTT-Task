@@ -1,16 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth import logout
 
 # Create your views here.
 
 def home(request):
     return render(request, 'base/home.html')
 
-def loginPage(request):
-    return HttpResponse('Login Page')
-
 def logoutPage(request):
-    return HttpResponse('Logout Page')
+    logout(request)
+    return redirect('/')
 
 def createTrip(request):
     return HttpResponse('Create a Trip')

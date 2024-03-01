@@ -1,5 +1,24 @@
-{% extends 'main.html' %}
-
-{% block content %}
-<h1>home</h1>
+{% extends 'main.html' %} {% block content %}
+<h2>Upcomnig Events</h2>
+{% if not upcoming_events %}
+<p>None</p>
+{% else %}
+<ul>
+  {% for event in upcoming_events %}
+  <li>{{event}}</li>
+  {% endfor %} {% endif %}
+</ul>
+<hr />
+<h2>Current Day Events</h2>
+{% if not current_day_events %}
+<p>None</p>
+{% else %}
+<ul>
+  {% for event in current_day_events %}
+  <li>{{event}}</li>
+  {% endfor %} {% endif %}
+</ul>
+<hr />
+<h2>Total Amount Spent</h2>
+<p>{{total_amount}}</p>
 {% endblock content %}

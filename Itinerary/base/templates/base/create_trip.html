@@ -1,0 +1,71 @@
+{% block content %}
+<div>
+  <form method="POST" action="" onsubmit="return validateDates()">
+    {% csrf_token %} {{ form.as_p }}
+    <label for="trip-name">Trip Name: </label>
+    <input type="text" placeholder="Enter Trip Name" name="trip-name" />
+    <br />
+    <label for="destination">Choose Destination: </label>
+    <select name="destination" id="destination">
+      <option value="">Select a destination</option>
+      {% for city in destinations %}
+      <option value="{{ city }}">{{ city }}</option>
+      {% endfor %}
+    </select>
+    <br />
+    <label for="start-date">Start Date: </label>
+    <input
+      type="date"
+      id="start-date"
+      placeholder="Start Date"
+      name="start-date"
+    />
+    <label for="end-date">End Date: </label>
+    <input type="date" id="end-date" placeholder="End Date" name="end-date" />
+    <br />
+    <div id="members">
+      <!-- Member input fields will be dynamically added here -->
+    </div>
+    <button type="button" id="add-member">Add Member</button>
+    <br />
+    <input type="submit" value="Submit" />
+  </form>
+</div>
+
+<script>
+  function validateDates() {
+    var startDate = new Date(document.getElementById("start-date").value);
+    var endDate = new Date(document.getElementById("end-date").value);
+
+    if (endDate <= startDate) {
+      alert("End date must be after the start date.");
+      return false;
+    }
+
+    return true;
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const addMemberButton = document.getElementById("add-member");
+    const membersContainer = document.getElementById("members");
+    let memberCount = 0;
+
+    addMemberButton.addEventListener("click", function () {
+      memberCount++;
+      const memberInput = document.createElement("input");
+      memberInput.type = "text";
+      memberInput.placeholder = "Enter Member ID";
+      memberInput.name = "member-id";
+
+      const label = document.createElement("label");
+      label.textContent = "Member " + memberCount + ": ";
+
+      const br = document.createElement("br");
+
+      membersContainer.appendChild(label);
+      membersContainer.appendChild(memberInput);
+      membersContainer.appendChild(br);
+    });
+  });
+</script>
+{% endblock content %}

@@ -12,22 +12,15 @@ class Student(AbstractUser):
     
 class Group(models.Model):
     leader = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='group_leader')
-    members = models.ManyToManyField(Student, related_name='group_members')
+    members = models.CharField(max_length=255, null=True, blank=True)
 
-class Location(models.Model):
-    name = models.CharField(max_length=100)
-    airport_name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
     
 class Trip(models.Model):
     trip_name = models.CharField(max_length=100)
-    destination = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='trip_destination')
+    destination = models.CharField(max_length=100)
     start_date = models.DateField()
     end_date = models.DateField()
-    group_leader = models.ForeignKey(Student, on_delete=models.CASCADE)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='trip_location')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.trip_name

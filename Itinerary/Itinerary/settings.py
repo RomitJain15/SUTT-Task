@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-SITE_ID = 2
+SITE_ID = 3
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -103,6 +103,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = "base.Student"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

@@ -1,13 +1,31 @@
 {% extends 'main.html' %} {% block content %}
-<h2>Upcomnig Events</h2>
+<h2>Your Trips</h2>
+{% if not trips %}
+<p>No Trips...<a href="{% url 'create-trip' %}">Create One?</a></p>
+{% else %}
+<ol>
+  {% for trip in trips %}
+  <li>
+    <p>Name: {{ trip.trip_name }}</p>
+    <p>Destination: {{ trip.destination }}</p>
+    <p>Start Date: {{ trip.start_date }}</p>
+    <p>End Date: {{ trip.end_date }}</p>
+    <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
+  </li>
+  {% endfor %}
+</ol>
+{% endif %}
+<hr />
+<h2>Upcoming Events</h2>
 {% if not upcoming_events %}
 <p>None</p>
 {% else %}
 <ul>
   {% for event in upcoming_events %}
-  <li>{{event}}</li>
-  {% endfor %} {% endif %}
+  <li>{{ event }}</li>
+  {% endfor %}
 </ul>
+{% endif %}
 <hr />
 <h2>Current Day Events</h2>
 {% if not current_day_events %}
@@ -15,10 +33,11 @@
 {% else %}
 <ul>
   {% for event in current_day_events %}
-  <li>{{event}}</li>
-  {% endfor %} {% endif %}
+  <li>{{ event }}</li>
+  {% endfor %}
 </ul>
+{% endif %}
 <hr />
 <h2>Total Amount Spent</h2>
-<p>{{total_amount}}</p>
+<p>{{ total_amount }}</p>
 {% endblock content %}

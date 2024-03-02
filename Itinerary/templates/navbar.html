@@ -2,10 +2,11 @@
   <h1>LOGO</h1>
 </a>
 
-<a href="/create-trip">Create a Trip</a>
+<a href="{% url 'create-trip' %}">Create a Trip</a>
+<a href="{% url 'search-flights' %}">Search Flights</a>
 {% load socialaccount %} {% if user.is_authenticated %}
-<p>You are signed in as {{user.get_full_name}}</p>
 <a href="{% url 'logout' %}">Logout</a>
+<p>You are signed in as {{user.get_full_name}}</p>
 {% else %}
 <a href="{% provider_login_url 'google' %}?next=/">Login</a>
 {% endif %}

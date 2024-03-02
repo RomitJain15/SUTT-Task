@@ -26,14 +26,11 @@ class Trip(models.Model):
         return self.trip_name
 
 class Plan(models.Model):
-    name = models.CharField(max_length=100)
     events = models.ManyToManyField('Event')
     creator = models.ForeignKey(Student, on_delete=models.CASCADE)
     being_followed = models.BooleanField(default=False)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.name
 
 class Event(models.Model):
     location = models.CharField(max_length=100)

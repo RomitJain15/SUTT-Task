@@ -1,9 +1,14 @@
-{% block content %}
+{% extends 'main.html' %} {% block content %}
 <div>
   <form method="POST" action="" onsubmit="return validateDates()">
     {% csrf_token %} {{ form.as_p }}
     <label for="trip-name">Trip Name: </label>
-    <input type="text" placeholder="Enter Trip Name" name="trip-name" />
+    <input
+      type="text"
+      placeholder="Enter Trip Name"
+      name="trip-name"
+      id="trip-name"
+    />
     <br />
     <label for="destination">Choose Destination: </label>
     <select name="destination" id="destination">
@@ -30,12 +35,37 @@
     <br />
     <input type="submit" value="Submit" />
   </form>
+  <a href="{% url 'home' %}">
+    <button>Go Back</button>
+  </a>
 </div>
 
 <script>
   function validateDates() {
-    var startDate = new Date(document.getElementById("start-date").value);
-    var endDate = new Date(document.getElementById("end-date").value);
+    var tripName = document.getElementById("trip-name").value;
+    var selectDestination = document.getElementById("destination").value;
+    var startDateValue = document.getElementById("start-date").value;
+    var endDateValue = document.getElementById("end-date").value;
+    if (tripName === "") {
+      alert("Please enter a trip name.");
+      return false;
+    } else if (selectDestination === "") {
+      alert("Please enter a destination.");
+      return false;
+    }
+
+    if (startDateValue === "" || endDateValue === "") {
+      alert("Please enter both start and end dates.");
+      return false;
+    }
+
+    var startDate = new Date(startDateValue);
+    var endDate = new Date(endDateValue);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      alert("Invalid date format.");
+      return false;
+    }
 
     if (endDate <= startDate) {
       alert("End date must be after the start date.");

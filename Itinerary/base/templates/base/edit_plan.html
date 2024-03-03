@@ -1,0 +1,67 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<ol>
+{% for event in events %}
+<li>
+<p>Location: {{event.location}}</p>
+<p>Activities: {{event.activities}}</p>
+<p>Cost: {{event.estimated_cost}}</p>
+<p>Start Time: {{event.start_time}}</p>
+<p>End Time: {{event.end_time}}</p>
+<p>Date: {{event.date}}</p>
+<a href="{% url 'edit-event' event.id %}">Edit</a>
+<a href="{% url 'delete-event' event.id %}">Delete</a>
+</li>
+{% endfor %}
+</ol>
+<div>
+    <h2>Add Event</h2>
+    <button id="add-event-btn">Add Event</button>
+    <form id="event-form" method="POST">
+      {% csrf_token %}
+      <input type="hidden" id="event_count" name="event_count" value="0" />
+      <div id="event-container">
+        <!-- Event input fields will be dynamically added here -->
+      </div>
+      <button type="submit">Save Events</button>
+    </form>
+  </div>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const eventForm = document.getElementById("event-form");
+      const eventContainer = document.getElementById("event-container");
+      let eventCount = 0;
+  
+      const addEventButton = document.getElementById("add-event-btn");
+      addEventButton.addEventListener("click", function () {
+        eventCount++;
+  
+        // Create event input fields
+        const eventDiv = document.createElement("div");
+        eventDiv.innerHTML = `
+              <h3>Event ${eventCount}</h3>
+              <label for="location-${eventCount}">Location:</label>
+              <input type="text" id="location-${eventCount}" name="location_${eventCount}" required>
+              <label for="activities-${eventCount}">Activities:</label>
+              <textarea id="activities-${eventCount}" name="activities_${eventCount}" required></textarea>
+              <label for="cost-${eventCount}">Cost:</label>
+              <input type="number" id="cost-${eventCount}" name="cost_${eventCount}" required>
+              <label for="start-time-${eventCount}">Start Time:</label>
+              <input type="time" id="start-time-${eventCount}" name="start_time_${eventCount}" required>
+              <label for="end-time-${eventCount}">End Time:</label>
+              <input type="time" id="end-time-${eventCount}" name="end_time_${eventCount}" required>
+              <label for="date-${eventCount}">Date:</label>
+              <input type="date" id="date-${eventCount}" name="date_${eventCount}" required>
+          `;
+  
+        eventContainer.appendChild(eventDiv);
+  
+        // Update event_count input field
+        document.getElementById("event_count").value = eventCount;
+      });
+    });
+  </script>
+  
+  {% endblock content %}

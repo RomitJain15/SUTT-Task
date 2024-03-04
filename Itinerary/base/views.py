@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import logout
 from django.db.models import Q
-from .models import Group, Trip, Student, Plan, Event
+from .models import Group, Trip, Student, Plan, Event, Holiday
 from django.contrib.auth.decorators import login_required
-from .forms import EventForm
+from .extract_dates import holiday_dict
+import datetime
 
 # Create your views here.
 
@@ -40,8 +41,39 @@ def logoutPage(request):
     return redirect('/')
 
 def createTrip(request):
+    month_to_number = {
+        "January": 1,
+        "February": 2,
+        "March": 3,
+        "April": 4,
+        "May": 5,
+        "June": 6,
+        "July": 7,
+        "August": 8,
+        "September": 9,
+        "October": 10,
+        "November": 11,
+        "December": 12
+    }
+    for holiday_date, day in holiday_dict.items():
+        holiday = Holiday(date=holiday_date, day=day)
+        holiday.save()
+    holidays = Holiday.objects.all()
+    holidays_list = []
+    for holiday in holidays:
+        if holiday.day == "M" or holiday.day == "F" or holiday.day == "S" or holiday.day == "Vacation":
+            holidays_list.append(holiday.date)
+    today = datetime.date.today()
+    formatted_date = today.strftime("%B %d %Y").lstrip("0").replace(",", "")
+    final_holidays = []
+    for holiday_date in holidays_list:
+        if holiday_date[-1] >= formatted_date[-1]:
+            if month_to_number[holiday_date.split()[0]] >= month_to_number[formatted_date.split()[0]]:
+                final_holidays.append(holiday_date)
+
     context = {
-        "destinations": destinations
+        "destinations": destinations,
+        "holidays": final_holidays
     }
 
     if request.method == 'POST':

@@ -50,3 +50,10 @@ class Expenditure(models.Model):
 
     def __str__(self):
         return f"Expenditure: {self.amount}, Payer: {self.payer.username}"
+    
+class Holiday(models.Model):
+    date = models.CharField(max_length=100, primary_key=True)
+    day = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f"{self.date} - {self.day}"

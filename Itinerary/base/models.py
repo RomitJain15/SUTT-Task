@@ -39,9 +39,11 @@ class Event(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     date = models.DateField()
+    is_done = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.location} - {self.date}"
+
 
 class Expenditure(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)

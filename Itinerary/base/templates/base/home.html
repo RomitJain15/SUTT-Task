@@ -13,20 +13,23 @@
     {% if trip.group.leader == request.user %}
     <a href="{% url 'delete-trip' trip.id %}"><button>Delete Trip</button></a>
     {% endif %}
+
     {% for plan in trip.plan_set.all %}
     {% if plan.creator == request.user %}
-    <a href="{% url 'edit-plan' trip.id plan.creator %}"><button>Edit Plan</button></a>
-    <a href="{% url 'delete-plan' plan.id %}"><button>Delete Plan</button></a>
+      <a href="{% url 'edit-plan' trip.id plan.creator %}"><button>Edit Plan</button></a>
+      <a href="{% url 'delete-plan' plan.id %}"><button>Delete Plan</button></a>
     {% else %}
-    <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
+      <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
     {% endif %}
     {% endfor %}
+    
     {% if not trip.plan_set.all %}
     <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
     {% endif %}
     {% if trip.group.leader == request.user %}
     <a href="{% url 'select-plan' trip.id %}"><button>Select a Plan</button></a>
-    {% endif %}
+    <a href="{% url 'split-cost' trip.id %}"><button>Split Cost</button></a>
+    {% endif %}  
   </li>
   {% endfor %}
 </ol>
@@ -38,7 +41,13 @@
 {% else %}
 <ul>
   {% for event in upcoming_events %}
-  <li>{{ event }}</li>
+  <li>
+    <p>Location: {{event.location}}</p>
+    <p>Activities: {{event.activities}}</p>
+    <p>Time: {{event.start_time}} to {{event.end_time}}</p>
+    <p>Date: {{event.date}}</p>
+    <p>Cost: {{event.estimated_cost}}</p>
+  </li>
   {% endfor %}
 </ul>
 {% endif %}
@@ -49,7 +58,13 @@
 {% else %}
 <ul>
   {% for event in current_day_events %}
-  <li>{{ event }}</li>
+  <li>
+    <p>Location: {{event.location}}</p>
+    <p>Activities: {{event.activities}}</p>
+    <p>Time: {{event.start_time}} to {{event.end_time}}</p>
+    <p>Date: {{event.date}}</p>
+    <p>Cost: {{event.estimated_cost}}</p>
+  </li>
   {% endfor %}
 </ul>
 {% endif %}

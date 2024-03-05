@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "base.apps.BaseConfig",
     "django.contrib.sites",
-    "authentication.apps.AuthenticationConfig",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -146,7 +145,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ACCOUNT_ADAPTER = 'authentication.adapter.RestrictEmailAdapter'
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",

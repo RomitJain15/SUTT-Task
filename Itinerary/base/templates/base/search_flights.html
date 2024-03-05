@@ -1,3 +1,42 @@
-{% extends 'main.html' %} {% block content %}
-<p>Flights</p>
+{% extends 'main.html' %}
+
+{% block content %}
+  <h2>Search for Flights</h2>
+  <form id="flight-search-form" method="POST">
+    {% csrf_token %}
+    <label for="destination">Destination:</label>
+    <select id="destination" name="destination">
+        {% for destination in destinations %}
+            <option value="{{destination}}">{{destination}}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label for="departure-date">Departure Date:</label>
+    <input type="date" id="departure-date" name="departure_date" required><br><br>
+
+    <label for="adults">Adults:</label>
+    <input type="number" id="adults" name="adults" value="1" min="1"><br><br>
+
+    <label for="children">Children:</label>
+    <input type="number" id="children" name="children" value="0" min="0"><br><br>
+
+    <button type="submit">Search Flights</button>
+  </form>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const departureDateInput = document.getElementById("departure-date");
+
+      document.getElementById("flight-search-form").addEventListener("submit", function (event) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const selectedDepartureDate = new Date(departureDateInput.value);
+        if (selectedDepartureDate < today) {
+          event.preventDefault();
+
+          alert("Please select a departure date that is after today's date.");
+        }
+      });
+    });
+  </script>
 {% endblock content %}

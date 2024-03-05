@@ -13,4 +13,5 @@ urlpatterns = [
     path('edit-event/<int:pk>', views.editEvent, name="edit-event"),
     path('delete-event/<int:pk>', views.deleteEvent, name="delete-event"),
     path('select-plan/<int:pk>', views.selectPlan, name="select-plan"),
+    path('split-cost/<int:pk>', views.splitCost, name="split-cost"),
 ]

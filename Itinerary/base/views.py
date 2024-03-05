@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import logout
 from django.db.models import Q
-from .models import Group, Trip, Student, Plan, Event, Holiday
+from .models import Group, Trip, Student, Plan, Event, Holiday, Expenditure
 from django.contrib.auth.decorators import login_required
 from .extract_dates import holiday_dict
 import datetime
+import requests
 
 # Create your views here.
 
@@ -20,7 +21,15 @@ def home(request):
         student = Student.objects.get(username=request.user.username)
         student.id_number = request.user.email[1:9]
         student.save()
-
+        events = Event.objects.all()
+        for event in events:
+            if datetime.date.today() == event.date and datetime.datetime.now().time() > event.end_time:
+                event.is_done = True
+                event.save()
+            if event.is_done == False:
+                upcoming_events.append(event)
+                if event.date == datetime.date.today():
+                    current_day_events.append(event)
         trips = Trip.objects.all()
         for trip in trips:
             if trip.group.members:
@@ -28,6 +37,7 @@ def home(request):
                 formatted_members = [member[:4] + member[8:12] for member in members_list if member]
                 if request.user == trip.group.leader or student.id_number in formatted_members:
                     user_trips.append(trip)
+
     context = {
         "upcoming_events": upcoming_events,
         "current_day_events": current_day_events,
@@ -40,6 +50,7 @@ def logoutPage(request):
     logout(request)
     return redirect('/')
 
+@login_required(login_url="http://127.0.0.1:8000/accounts/google/login/?next=/")
 def createTrip(request):
     month_to_number = {
         "January": 1,
@@ -116,8 +127,55 @@ def deleteTrip(request, pk):
         return redirect('home')
     return render(request, 'base/delete.html', context)
 
+
+@login_required(login_url="http://127.0.0.1:8000/accounts/google/login/?next=/")
 def searchFlights(request):
-    context = {}
+    API_KEY = 'XizNScdN70WGHgsp3U7WYAwSSoGWFfSb'
+    url = 'https://test.api.amadeus.com/v1/shopping/flight-offers'
+    
+    if request.method == "POST":
+        destination = request.POST.get('destination')
+        departure_date = request.POST.get('departure_date')
+        adult_count = request.POST.get('adults')
+        children_count = request.POST.get('children')
+        print(destination, departure_date, adult_count, children_count)
+        destination_code = {
+            "Mumbai": "BOM",
+            "Bengaluru": "BLR",
+            "Jaipur": "JAI",
+            "Goa": "GOI",
+            "Kolkata": "CCU",
+            "Hyderabad": "HYD",
+            "Chennai": "MAA",
+            "Ahmedabad": "AMD"
+        }
+        headers = {
+            'Authorization': f'Bearer {API_KEY}',
+            'Content-Type': 'application/json'
+        }
+        params = {
+            'originLocationCode': 'DEL',
+            'destinationLocationCode': destination_code[destination],
+            'departureDate': f'{departure_date}',
+            'adults': adult_count,
+            'children': children_count,
+            'currencyCode': 'INR'
+        }
+
+        response = requests.get(url, headers=headers, params=params)
+
+        if response.status_code == 200:
+            flight_offers = response.json()
+            print(flight_offers)
+            # for offer in flight_offers['data']:
+            #     print(offer) 
+        else:
+            print(f'Error: {response.status_code}')
+            print(response.text)
+        return redirect('home')
+    context = {
+        "destinations": destinations
+    }
     return render(request, 'base/search_flights.html', context)
 
 def addPlan(request, pk):
@@ -237,3 +295,14 @@ def selectPlan(request, pk):
         selected_plan.save()
         return redirect('home')
     return render(request, 'base/select_plan.html', context)
+
+def splitCost(request, pk):
+    trip = Trip.objects.get(id=pk)
+    try:
+        plan_being_followed = trip.plan_set.get(being_followed=True)
+    except Plan.DoesNotExist:
+        plan_being_followed = None  
+    context = {
+        "plan": plan_being_followed
+    }
+    return render(request, 'base/split_cost.html')

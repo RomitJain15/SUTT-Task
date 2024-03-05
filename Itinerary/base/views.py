@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth import logout
-from django.db.models import Q
 from .models import Group, Trip, Student, Plan, Event, Holiday, Expenditure
 from django.contrib.auth.decorators import login_required
 from .extract_dates import holiday_dict

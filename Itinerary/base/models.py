@@ -27,6 +27,9 @@ class Trip(models.Model):
 
     def __str__(self):
         return self.trip_name
+    def delete(self, *args, **kwargs):
+        self.group.delete()
+        super().delete(*args, **kwargs)
 
 class Plan(models.Model):
     events = models.ManyToManyField('Event')

@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
-    'schedule',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -54,7 +53,10 @@ SOCIALACCOUNT_PROVIDERS = {
             "profile",
             "email",
         ],
-        "AUTH_PARAMS": {"access_type": "online"}
+        "AUTH_PARAMS": {
+            "access_type": "online",
+            "hd": "pilani.bits-pilani.ac.in" 
+        }
     }
 }
 

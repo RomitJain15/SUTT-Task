@@ -12,10 +12,9 @@ def read_pdf(file_path):
     with open(file_path, 'rb') as file:
         pdf_reader = PdfReader(file)
         num_pages = len(pdf_reader.pages)
-        words = []  # List to store words
+        words = [] 
         for page_num in range(num_pages):
             text = pdf_reader.pages[page_num].extract_text()
-            # Split text into words using regular expression
             page_words = re.findall(r'\b\w+\b', text)
             words.extend(page_words)
         return words

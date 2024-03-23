@@ -17,5 +17,4 @@ urlpatterns = [
     path('event-split-cost/<int:pk>', views.eventSplitCost, name="event-split-cost"),
     path('past-trips', views.pastTrips, name="past-trips"),
     path('past-trip-plans/<int:pk>', views.pastTripPlans, name="past-trip-plans"),
-    path('scheduler/', include('scheduler.urls')),
 ]

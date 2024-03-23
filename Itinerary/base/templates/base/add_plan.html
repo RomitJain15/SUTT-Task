@@ -17,15 +17,14 @@
   document.addEventListener("DOMContentLoaded", function () {
     const eventForm = document.getElementById("event-form");
     const eventContainer = document.getElementById("event-container");
-    const startDate = new Date("{{ start_date }}"); // Get the start date from the context
-    const endDate = new Date("{{ end_date }}"); // Get the end date from the context
+    const startDate = new Date("{{ start_date }}"); 
+    const endDate = new Date("{{ end_date }}"); 
     let eventCount = 0;
 
     const addEventButton = document.getElementById("add-event-btn");
     addEventButton.addEventListener("click", function () {
       eventCount++;
 
-      // Create event input fields
       const eventDiv = document.createElement("div");
       eventDiv.innerHTML = `
             <h3>Event ${eventCount}</h3>
@@ -46,7 +45,6 @@
 
       eventContainer.appendChild(eventDiv);
 
-      // Update event_count input field
       document.getElementById("event_count").value = eventCount;
     });
 
@@ -54,7 +52,7 @@
       for (let i = 1; i <= eventCount; i++) {
         const eventDate = new Date(document.getElementById(`date-${i}`).value);
         if (eventDate < startDate || eventDate > endDate) {
-          event.preventDefault(); // Prevent form submission
+          event.preventDefault();
           alert("Date must be between trip start and end date.");
         }
       }

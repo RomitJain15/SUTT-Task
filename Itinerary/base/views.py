@@ -4,10 +4,8 @@ from .models import Group, Trip, Student, Plan, Event, Holiday, Expenditure
 from django.contrib.auth.decorators import login_required
 from .extract_dates import holiday_dict
 import datetime
-import requests
-from django.db.models import Q
 from serpapi import GoogleSearch
-import json
+
 # Create your views here.
 
 destinations = ["Mumbai", "Bengaluru", "Jaipur", "Goa", "Kolkata", "Hyderabad", "Chennai", "Ahmedabad"]
@@ -231,7 +229,6 @@ def editPlan(request, pk, pk2):
             end_time = request.POST.get(f'end_time_{i}')
             date = request.POST.get(f'date_{i}')
 
-            # Create a new Event object and associate it with the Plan
             event = Event.objects.create(
                 location=location,
                 activities=activities,
@@ -297,6 +294,7 @@ def deleteEvent(request, pk):
 def selectPlan(request, pk):
     trip = Trip.objects.get(id=pk)
     plans = Plan.objects.filter(trip=trip)
+
     if Plan.objects.filter(trip=trip, being_followed=True).exists():
         context = {
             "plans": "Plan already selected"
@@ -318,7 +316,7 @@ def selectPlan(request, pk):
 @login_required(login_url="http://127.0.0.1:8000/accounts/google/login/?next=/")
 def searchFlights(request):
     API_KEY = "3a2edea6ab85bc60297279ce08d2ab75a71365e5f7e66ca2b3d524b6d326d906"
-    best_flights = []
+    flights = []
     if request.method == "POST":
         destination = request.POST.get('destination')
         departure_date = request.POST.get('departure_date')

@@ -3,6 +3,7 @@
 {% if not trips %}
 <p>No Trips...<a href="{% url 'create-trip' %}">Create One?</a></p>
 {% else %}
+
 <ol>
   {% for trip in trips %}
   <li>
@@ -14,14 +15,16 @@
     <a href="{% url 'delete-trip' trip.id %}"><button>Delete Trip</button></a>
     {% endif %}
 
-    {% for plan in trip.plan_set.all %}
-    {% if plan.creator == request.user %}
-      <a href="{% url 'edit-plan' trip.id plan.creator %}"><button>Edit Plan</button></a>
-      <a href="{% url 'delete-plan' plan.id %}"><button>Delete Plan</button></a>
+    {% if trip.plan_set.all %}
+        {% for plan in trip.plan_set.all %}
+            {% if plan.creator == request.user %}
+                <a href="{% url 'edit-plan' trip.id plan.creator %}"><button>Edit Plan</button></a>
+                <a href="{% url 'delete-plan' plan.id %}"><button>Delete Plan</button></a>
+            {% endif %}
+        {% endfor %}
     {% else %}
-      <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
+        <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
     {% endif %}
-    {% endfor %}
 
     {% if not trip.plan_set.all %}
     <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
@@ -34,6 +37,7 @@
   {% endfor %}
 </ol>
 {% endif %}
+
 <hr />
 <h2>Upcoming Events</h2>
 {% if not upcoming_events %}

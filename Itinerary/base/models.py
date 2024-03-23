@@ -5,7 +5,9 @@ from django.contrib.auth.models import AbstractUser
 class Student(AbstractUser):
     id_number = models.CharField(max_length=20)
     is_group_leader = models.BooleanField(default=False)
-    group = models.ForeignKey('Group', on_delete=models.SET_NULL, null=True, blank=True)
+
+    def total_expenditure_in_trip(self, trip):
+        return Expenditure.objects.filter(payer=self, event__trip=trip).aggregate(total_amount=models.Sum('amount'))['total_amount'] or 0
 
     def __str__(self):
         return self.username
@@ -21,6 +23,7 @@ class Trip(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
+    is_complete = models.BooleanField(default=False)
 
     def __str__(self):
         return self.trip_name
@@ -40,9 +43,14 @@ class Event(models.Model):
     end_time = models.TimeField()
     date = models.DateField()
     is_done = models.BooleanField(default=False)
+    trip  = models.ForeignKey(Trip, on_delete=models.CASCADE, blank=True, null=True)
+    cost_split = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.location} - {self.date}"
+    
+    class Meta:
+        ordering = ['date', 'start_time']
 
 
 class Expenditure(models.Model):

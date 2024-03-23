@@ -22,7 +22,7 @@
       <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
     {% endif %}
     {% endfor %}
-    
+
     {% if not trip.plan_set.all %}
     <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
     {% endif %}
@@ -42,6 +42,7 @@
 <ul>
   {% for event in upcoming_events %}
   <li>
+    <p>Trip: {{event.trip}}</p>
     <p>Location: {{event.location}}</p>
     <p>Activities: {{event.activities}}</p>
     <p>Time: {{event.start_time}} to {{event.end_time}}</p>
@@ -70,5 +71,7 @@
 {% endif %}
 <hr />
 <h2>Total Amount Spent</h2>
-<p>{{ total_amount }}</p>
+{% for trip, total_amount in total_amount_for_trip.items %}
+  <p>{{total_amount}} - {{trip.trip_name}}</p>
+{% endfor %}
 {% endblock content %}

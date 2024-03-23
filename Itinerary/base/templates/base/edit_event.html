@@ -1,14 +1,32 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const startDate = new Date("{{ start_date }}");
+        const endDate = new Date("{{ end_date }}");
+
+        form.addEventListener("submit", function (event) {
+            const dateInput = document.getElementById("date");
+            const selectedDate = new Date(dateInput.value);
+            
+            if (selectedDate < startDate || selectedDate > endDate) {
+                event.preventDefault();
+                alert("Please select a date between the trip's start and end dates.");
+            }
+        });
+    });
+</script>
+
 <ul>
     <li>
-        <p>Location: {{event.location}}</p>
-        <p>Activities: {{event.activities}}</p>
-        <p>Cost: {{event.estimated_cost}}</p>
-        <p>Start Time: {{event.start_time}}</p>
-        <p>End Time: {{event.end_time}}</p>
-        <p>Date: {{event.date}}</p>
+        <p>Location: {{ event.location }}</p>
+        <p>Activities: {{ event.activities }}</p>
+        <p>Cost: {{ event.estimated_cost }}</p>
+        <p>Start Time: {{ event.start_time }}</p>
+        <p>End Time: {{ event.end_time }}</p>
+        <p>Date: {{ event.date }}</p>
     </li>
 </ul>
 <form method="POST">

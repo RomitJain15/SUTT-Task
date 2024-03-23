@@ -23,6 +23,34 @@
     <button type="submit">Search Flights</button>
   </form>
 
+  {% if flights %}
+  <p>
+    <h2>Flights:-</h2>
+    <ol>
+      {% for flight in flights %}
+        <li>
+          {% for i in flight.flights %}
+            <p>
+              Departure Airport: {{ i.departure_airport.name }} | Departure Time: {{ i.departure_airport.time }}<br>
+              Arrival Airport: {{ i.arrival_airport.name }} | Arrival Time: {{ i.arrival_airport.time }}<br>
+              Airline: {{ i.airline }} {{ i.flight_number }}<br>
+              {% if forloop.last %}
+                Total Duration: {{ flight.total_duration }} minutes<br>
+                Price: Rs.{{ flight.price }}<br>
+              {% else %}
+                Duration: {{ i.duration }} minutes<br>
+                Layover At: {{ flight.layovers.0.name }}<br>
+                Layover Time: {{ flight.layovers.0.duration }} minutes<br>
+                <br>
+              {% endif %}
+            </p>
+          {% endfor %}
+        </li>
+      {% endfor %}
+    </ol>
+  </p>
+{% endif %}
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const departureDateInput = document.getElementById("departure-date");

@@ -1,29 +1,36 @@
 {% extends 'main.html' %}
 
 {% block content %}
-{% for plan in plans %}
-    <h3>Plan {{ forloop.counter }}</h3>
-    <ul>
-    {% for event in plan.events.all %}
-        <li>
-            <p>Location: {{ event.location }}</p>
-            <p>Activities: {{ event.activities }}</p>
-            <p>Estimated Cost: {{ event.estimated_cost }}</p>
-            <p>Start Time: {{ event.start_time }}</p>
-            <p>End Time: {{ event.end_time }}</p>
-            <p>Date: {{ event.date }}</p>
-        </li>
-    {% endfor %}
-    </ul>
-{% endfor %}
-<form method="POST">
-    {% csrf_token %}
-    <h2>Select Plan:-</h2>
-    {% for plan in plans %}
-        <input type="radio" id="plan{{ forloop.counter }}" name="selected_plan" value="{{ plan.id }}">
-        <label for="plan{{ forloop.counter }}">Plan {{ forloop.counter }}</label><br>
-    {% endfor %}
-    <button type="submit">Submit</button>
-</form>
-
+{% if plans %}
+    {% if plans == "Plan already selected" %}
+        <h2>Plan is already selected</h2>
+    {% else %}
+        {% for plan in plans %}
+            <h3>Plan {{ forloop.counter }}</h3>
+            <ul>
+            {% for event in plan.events.all %}
+                <li>
+                    <p>Location: {{ event.location }}</p>
+                    <p>Activities: {{ event.activities }}</p>
+                    <p>Estimated Cost: {{ event.estimated_cost }}</p>
+                    <p>Start Time: {{ event.start_time }}</p>
+                    <p>End Time: {{ event.end_time }}</p>
+                    <p>Date: {{ event.date }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endfor %}
+        <form method="POST">
+            {% csrf_token %}
+            <h2>Select Plan:-</h2>
+            {% for plan in plans %}
+                <input type="radio" id="plan{{ forloop.counter }}" name="selected_plan" value="{{ plan.id }}">
+                <label for="plan{{ forloop.counter }}">Plan {{ forloop.counter }}</label><br>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+    {% endif %}
+{% else %}
+<h2>Please Add a Plan</h2>
+{% endif %}
 {% endblock content %}

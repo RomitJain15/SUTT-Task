@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% for plan in plans %}
+    {% if plan.being_followed %}
+        <h3>Plan {{forloop.counter}} (Was Followed)</h3>
+    {% else %}
+        <h3>Plan {{forloop.counter}}</h3>
+    {% endif %}
+    <ul>
+    {% for event in plan.events.all %}
+        <li>
+            <p>Location: {{ event.location }}</p>
+            <p>Activities: {{ event.activities }}</p>
+            <p>Estimated Cost: {{ event.estimated_cost }}</p>
+            <p>Start Time: {{ event.start_time }}</p>
+            <p>End Time: {{ event.end_time }}</p>
+            <p>Date: {{ event.date }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+<a href="{% url 'past-trips' %}"><button>Go Back</button></a>
+{% endblock content %}

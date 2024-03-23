@@ -1,0 +1,39 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<p>Location: {{event.location}}</p>
+<p>Activities: {{event.activities}}</p>
+<p>Estimated Cost: {{event.estimated_cost}}</p>
+<form id="split-cost-form" method="POST" action="">
+    {% csrf_token %}
+    {% for member in members %}
+        <p>{{member.get_full_name}} ({{member.email}}) <input class="amount-input" type="number" name="amount[]" placeholder="Enter Amount" /></p>
+    {% endfor %}
+    <button id="submit-btn" type="submit">Submit</button>
+</form>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById('split-cost-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const amountInputs = document.querySelectorAll('.amount-input');
+
+        submitBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            
+            let totalAmount = 0;
+            amountInputs.forEach(function(input) {
+                if (input.value) {
+                    totalAmount += parseFloat(input.value);
+                }
+            });
+
+            const estimatedCost = parseFloat("{{ event.estimated_cost }}");
+            if (totalAmount === estimatedCost) {
+                form.submit();
+            } else {
+                alert('Total amount entered does not match the estimated cost.');
+            }
+        });
+    });
+</script>
+{% endblock content %}

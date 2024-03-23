@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<ul>
+{% for trip, total_amount in total_amount_for_trip.items %}
+    <li>
+        <p>Name: {{trip.trip_name}}</p>
+        <p>Destination: {{trip.destination}}</p>
+        <p>Date: {{trip.start_date}} to {{trip.end_date}}</p>
+        <p>Total Cost: {{total_amount}}</p>
+        <a href="{% url 'past-trip-plans' trip.id %}"><button>View Plans</button></a>
+    </li>
+{% endfor %}
+</ul>
+<a href="{% url 'home' %}"><button>Go Back</button></a>
+{% endblock content %}

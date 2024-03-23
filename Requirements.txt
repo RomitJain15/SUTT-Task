@@ -1,4 +1,3 @@
-Requirements I couldn't complete on time:-
+Requirements I couldn't complete:-
 
-1) Allowing only BITS students to Login
-2) Calendar view to see all plans
+1) Calendar view to see all plans

@@ -20,15 +20,13 @@
             {% if plan.creator == request.user %}
                 <a href="{% url 'edit-plan' trip.id plan.creator %}"><button>Edit Plan</button></a>
                 <a href="{% url 'delete-plan' plan.id %}"><button>Delete Plan</button></a>
+            {% else %}
+                <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
             {% endif %}
         {% endfor %}
-    {% else %}
-        <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
+      
     {% endif %}
 
-    {% if not trip.plan_set.all %}
-    <a href="{% url 'add-plan' trip.id %}"><button>Add Plan</button></a>
-    {% endif %}
     {% if trip.group.leader == request.user %}
     <a href="{% url 'select-plan' trip.id %}"><button>Select a Plan</button></a>
     <a href="{% url 'split-cost' trip.id %}"><button>Split Cost</button></a>
